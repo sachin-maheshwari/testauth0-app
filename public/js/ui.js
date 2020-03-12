@@ -63,7 +63,8 @@ const updateUI = async () => {
     if (isAuthenticated) {
       const user = await auth0.getUser();
       let token =  auth0.cache.cache["default::openid profile email"].id_token;	    
-      console.log("openid token", token)
+      console.log("openid token", token);
+      setCookie("v3jwt", token, 1);
       document.getElementById("profile-data").innerText = JSON.stringify(
         user,
         null,
@@ -95,3 +96,12 @@ window.onpopstate = (e) => {
     showContentFromUrl(e.state.url);
   }
 };
+
+function setCookie(cname, cvalue, exdays) {
+	  var d = new Date();
+	  d.setTime(d.getTime() + (exdays*24*60*60*1000));
+	  var expires = "expires="+ d.toUTCString();
+	  document.cookie = cname + "=" + cvalue + ";domain=." + 
+		location.hostname.split('.').reverse()[1] + "." + 
+		location.hostname.split('.').reverse()[0]+ ";" + expires + ";path=/";
+}
